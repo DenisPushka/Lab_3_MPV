@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -32,6 +33,41 @@ namespace Lab_3
             Result = factorial;
         }
 
+        private void Matrix()
+        {
+            var a = new int[_number, _number];
+            var b = new int[_number, _number];
+            var res = new int[_number, _number];
+            a = CreateMatrix(_number, a);
+            b = CreateMatrix(_number, b);
+            for (var i = 0; i < _number; i++)
+            {
+                for (var j = 0; j < _number; j++)
+                {
+                    for (var k = 0; k < _number; k++)
+                    {
+                        res[i, j] += a[i, k] * b[k, j];
+                    }
+                }
+            }
+
+            Result = (ulong)res[0, 0];
+        }
+
+        private static int[,] CreateMatrix(int count, int[,] a)
+        {
+            var rnd = new Random();
+            for (var i = 0; i < count; i++)
+            {
+                for (var j = 0; j < count; j++)
+                {
+                    a[i, j] = rnd.Next(-count, count);
+                }
+            }
+
+            return a;
+        }
+
         public Task Start(MainForm main, int countPanel)
         {
             var panel = new Panel();
@@ -49,7 +85,7 @@ namespace Lab_3
             label.Font = new Font("Microsoft Sans Serif", 8);
             label.Text = "Вычисление факториала: " + _number;
             panel.Controls.Add(label);
-            main.Stack.Push(new Thread(Factorial));
+            main.Stack.Push(new Thread(Matrix));
             Label.Location = new Point(0, 70);
             Label.Height = 20;
             Label.Width = Width;

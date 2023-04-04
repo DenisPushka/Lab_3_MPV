@@ -7,7 +7,7 @@ namespace Lab_3
 {
     public partial class MainForm : Form
     {
-        public Stack<Thread> Stack = new Stack<Thread>();
+        public readonly Stack<Thread> Stack = new Stack<Thread>();
         public MainForm()
         {
             InitializeComponent();
