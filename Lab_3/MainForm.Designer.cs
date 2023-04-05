@@ -32,10 +32,13 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.inputNumber = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.radioButtonMatrix = new System.Windows.Forms.RadioButton();
+            this.radioButtonFactorail = new System.Windows.Forms.RadioButton();
             this.SuspendLayout();
             // 
             // inputNumber
             // 
+            this.inputNumber.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.inputNumber.Font = new System.Drawing.Font("MS Reference Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.inputNumber.Location = new System.Drawing.Point(162, 653);
             this.inputNumber.Name = "inputNumber";
@@ -44,18 +47,46 @@
             // 
             // label1
             // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label1.Font = new System.Drawing.Font("MS Reference Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label1.ImageAlign = System.Drawing.ContentAlignment.BottomLeft;
             this.label1.Location = new System.Drawing.Point(12, 653);
             this.label1.Name = "label1";
+            this.label1.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.label1.Size = new System.Drawing.Size(144, 23);
             this.label1.TabIndex = 1;
             this.label1.Text = "Введите число:";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             // 
-            // Form1
+            // radioButtonMatrix
+            // 
+            this.radioButtonMatrix.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.radioButtonMatrix.Location = new System.Drawing.Point(332, 655);
+            this.radioButtonMatrix.Name = "radioButtonMatrix";
+            this.radioButtonMatrix.Size = new System.Drawing.Size(104, 24);
+            this.radioButtonMatrix.TabIndex = 2;
+            this.radioButtonMatrix.TabStop = true;
+            this.radioButtonMatrix.Text = "Матрица";
+            this.radioButtonMatrix.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonFactorail
+            // 
+            this.radioButtonFactorail.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.radioButtonFactorail.Location = new System.Drawing.Point(402, 655);
+            this.radioButtonFactorail.Name = "radioButtonFactorail";
+            this.radioButtonFactorail.Size = new System.Drawing.Size(104, 24);
+            this.radioButtonFactorail.TabIndex = 3;
+            this.radioButtonFactorail.TabStop = true;
+            this.radioButtonFactorail.Text = "Факториал";
+            this.radioButtonFactorail.UseVisualStyleBackColor = true;
+            // 
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1248, 685);
+            this.Controls.Add(this.radioButtonFactorail);
+            this.Controls.Add(this.radioButtonMatrix);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.inputNumber);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -64,6 +95,9 @@
             this.ResumeLayout(false);
             this.PerformLayout();
         }
+
+        private System.Windows.Forms.RadioButton radioButtonMatrix;
+        private System.Windows.Forms.RadioButton radioButtonFactorail;
 
         private System.Windows.Forms.Label label1;
 

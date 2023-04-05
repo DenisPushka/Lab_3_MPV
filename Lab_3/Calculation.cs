@@ -1,57 +1,96 @@
 ﻿using System;
-using System.Drawing;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Lab_3
 {
     public class Calculation
     {
-        public ulong Result;
         private readonly int _number;
-        private const ushort Width = 200;
-        private const short Height = 100;
-        public readonly Label Label = new Label();
+        public ProgressBar ProgressBar;
+        private CancellationTokenSource _cancellationTokenSource;
+        public Label Label;
+        private readonly bool _radioMatrix;
 
-        public Calculation(int number)
+        public Calculation(int number, bool radioMatrix)
         {
             _number = number;
+            ProgressBar = new ProgressBar();
+            Label = new Label();
+            _radioMatrix = radioMatrix;
         }
 
-        private void Factorial()
+        private void Factorial(object state)
         {
-            var n = ulong.Parse(_number.ToString());
+            var n = (ulong)_number;
+            var start = n;
+            var token = (CancellationToken)state;
             ulong factorial = 1;
 
+            var progress = 0;
             while (n >= 1)
             {
                 factorial *= n;
                 n--;
+                progress++;
+                if (ProgressBar.InvokeRequired)
+                {
+                    var progress1 = progress;
+                    ProgressBar.Invoke(new MethodInvoker(delegate { ProgressBar.Value = progress1 / (int)start; }));
+                }
+
+                if (token.IsCancellationRequested)
+                {
+                    return;
+                }
             }
 
-            Result = factorial;
+            if (ProgressBar.InvokeRequired)
+            {
+                Label.Invoke(new MethodInvoker(delegate { Label.Text = factorial.ToString(); }));
+                ProgressBar.Invoke(new MethodInvoker(delegate { ProgressBar.Value = ProgressBar.Maximum; }));
+            }
         }
 
-        private void Matrix()
+        private void Matrix(object state)
         {
+            var token = (CancellationToken)state;
             var a = new int[_number, _number];
             var b = new int[_number, _number];
             var res = new int[_number, _number];
             a = CreateMatrix(_number, a);
             b = CreateMatrix(_number, b);
+            var progress = 0;
             for (var i = 0; i < _number; i++)
             {
                 for (var j = 0; j < _number; j++)
                 {
                     for (var k = 0; k < _number; k++)
                     {
+                        progress++;
                         res[i, j] += a[i, k] * b[k, j];
+                        if (ProgressBar.InvokeRequired)
+                        {
+                            var progress1 = progress;
+                            ProgressBar.Invoke(new MethodInvoker(delegate
+                            {
+                                ProgressBar.Value = progress1 / (_number * _number);
+                            }));
+                        }
+
+                        if (token.IsCancellationRequested)
+                        {
+                            return;
+                        }
                     }
                 }
             }
 
-            Result = (ulong)res[0, 0];
+            if (ProgressBar.InvokeRequired)
+            {
+                Label.Invoke(new MethodInvoker(delegate { Label.Text = res[0, 0].ToString(); }));
+                ProgressBar.Invoke(new MethodInvoker(delegate { ProgressBar.Value = ProgressBar.Maximum; }));
+            }
         }
 
         private static int[,] CreateMatrix(int count, int[,] a)
@@ -61,39 +100,20 @@ namespace Lab_3
             {
                 for (var j = 0; j < count; j++)
                 {
-                    a[i, j] = rnd.Next(-count, count);
+                    a[i, j] = rnd.Next(count);
                 }
             }
 
             return a;
         }
 
-        public Task Start(MainForm main, int countPanel)
+        public void Start()
         {
-            var panel = new Panel();
-            panel.BackColor = Color.Beige;
-            var c = countPanel != 0 ? 10 : 0;
-            panel.Location = new Point(20 + countPanel * Width + c * countPanel, 20);
-            panel.Height = Height;
-            panel.Width = Width;
-            panel.BorderStyle = BorderStyle.Fixed3D;
-            main.Controls.Add(panel);
-
-            var label = new Label();
-            label.Location = new Point(0, 0);
-            label.Width = Width;
-            label.Font = new Font("Microsoft Sans Serif", 8);
-            label.Text = "Вычисление факториала: " + _number;
-            panel.Controls.Add(label);
-            main.Stack.Push(new Thread(Matrix));
-            Label.Location = new Point(0, 70);
-            Label.Height = 20;
-            Label.Width = Width;
-            Label.TextAlign = ContentAlignment.TopCenter;
-            Label.BackColor = Color.Gray;
-            Label.Text = Result.ToString();
-            panel.Controls.Add(Label);
-            return Task.CompletedTask;
+            _cancellationTokenSource = new CancellationTokenSource();
+            if (_radioMatrix)
+                ThreadPool.QueueUserWorkItem(Matrix, _cancellationTokenSource.Token);
+            else
+                ThreadPool.QueueUserWorkItem(Factorial, _cancellationTokenSource.Token);
         }
     }
 }
