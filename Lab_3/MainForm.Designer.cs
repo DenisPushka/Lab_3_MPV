@@ -34,6 +34,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.radioButtonMatrix = new System.Windows.Forms.RadioButton();
             this.radioButtonFactorail = new System.Windows.Forms.RadioButton();
+            this.timer1 = new System.Timers.Timer();
+            ((System.ComponentModel.ISupportInitialize)(this.timer1)).BeginInit();
             this.SuspendLayout();
             // 
             // inputNumber
@@ -80,6 +82,13 @@
             this.radioButtonFactorail.Text = "Факториал";
             this.radioButtonFactorail.UseVisualStyleBackColor = true;
             // 
+            // timer1
+            // 
+            this.timer1.Enabled = true;
+            this.timer1.Interval = 500D;
+            this.timer1.SynchronizingObject = this;
+            this.timer1.Elapsed += new System.Timers.ElapsedEventHandler(this.timer1_Elapsed);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -92,9 +101,12 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
             this.Text = "Lab_3";
+            ((System.ComponentModel.ISupportInitialize)(this.timer1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
         }
+
+        private System.Timers.Timer timer1;
 
         private System.Windows.Forms.RadioButton radioButtonMatrix;
         private System.Windows.Forms.RadioButton radioButtonFactorail;
